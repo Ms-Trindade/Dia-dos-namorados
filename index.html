@@ -77,7 +77,8 @@
             margin-top: 18px;
             margin-bottom: 6px;
             color: #3a8dde;
-            font-weight: 600;
+            font-weight: 700;
+            font-size: 1.1rem;
         }
         input, textarea {
             display: block;
@@ -90,6 +91,9 @@
             font-size: 1rem;
             background: #f9faff;
             transition: border 0.2s;
+        }
+        textarea {
+            resize: vertical;
         }
         input:focus, textarea:focus {
             border-color: #3a8dde;
@@ -294,6 +298,29 @@
             40%  { transform: translateY(0);}
             100% { transform: translateY(0);}
         }
+        /* Responsividade */
+        @media (max-width: 600px) {
+            .envelope-card {
+                padding: 18px 4vw 18px 4vw;
+                max-width: 98vw;
+            }
+            .page {
+                max-width: 100vw;
+                padding: 0;
+            }
+            input, textarea {
+                width: 100%;
+                max-width: 100vw;
+                font-size: 1rem;
+            }
+            button, .back-button {
+                font-size: 1rem;
+                padding: 10px;
+            }
+            h1, h2 {
+                font-size: 1.3rem;
+            }
+        }
     </style>
 </head>
 <body>
@@ -327,7 +354,9 @@
 
     <!-- Correio Elegante -->
     <div class="page" id="correio">
-        <form class="envelope-card" id="form-correio" autocomplete="off">
+        <form class="envelope-card" id="form-correio" autocomplete="off"
+            action="https://docs.google.com/forms/d/e/1FAIpQLSfbvJgP0gKUnWCfEQXmMShPCvVKIPvCUWXoK0SBibqVGkRSqQ/formResponse"
+            method="POST">
             <div class="envelope-seal">
                 <span class="wolf-icon">🐺</span>
             </div>
@@ -335,12 +364,13 @@
             <div class="subtitle">
                 Envie uma mensagem para alguém especial neste Dia dos Namorados!
             </div>
+            <input type="hidden" name="entry.827370412" value="Correio Elegante">
             <label for="remetente">Seu Nickname (opcional)</label>
-            <input type="text" id="remetente" name="remetente" maxlength="40" placeholder="Deixe em branco para ser anônimo">
+            <input type="text" id="remetente" name="entry.490416092" maxlength="40" placeholder="Deixe em branco para ser anônimo">
             <label for="destinatario">Para quem?</label>
-            <input type="text" id="destinatario" name="destinatario" maxlength="40" required placeholder="Nome do destinatário">
+            <input type="text" id="destinatario" name="entry.2069130195" maxlength="40" required placeholder="Nome do destinatário">
             <label for="mensagem">Mensagem</label>
-            <textarea id="mensagem" name="mensagem" rows="5" maxlength="300" required placeholder="Escreva sua cartinha aqui..."></textarea>
+            <textarea id="mensagem" name="entry.751823892" rows="5" maxlength="300" required placeholder="Escreva sua cartinha aqui..."></textarea>
             <button type="submit">Enviar cartinha 💌</button>
             <button type="button" class="back-button" onclick="navigateTo('home')">Voltar para a página inicial</button>
             <div class="footer">
@@ -358,15 +388,17 @@
                     Obrigado por compartilhar sua mensagem especial.<br>
                     Ela será entregue com todo o carinho!
                 </div>
-                <button onclick="restartCorreio()">Enviar outra cartinha</button>
-                <button onclick="navigateTo('home')">Voltar para a página inicial</button>
+                <button type="button" onclick="restartCorreio()">Enviar outra cartinha</button>
+                <button type="button" onclick="navigateTo('home')">Voltar para a página inicial</button>
             </div>
         </div>
     </div>
 
     <!-- Melhor Dupla -->
     <div class="page" id="melhor-dupla">
-        <form class="envelope-card" id="form-dupla" autocomplete="off">
+        <form class="envelope-card" id="form-dupla" autocomplete="off"
+            action="https://docs.google.com/forms/d/e/1FAIpQLSfbvJgP0gKUnWCfEQXmMShPCvVKIPvCUWXoK0SBibqVGkRSqQ/formResponse"
+            method="POST">
             <div class="envelope-seal">
                 <span class="wolf-icon">🐺</span>
             </div>
@@ -374,8 +406,9 @@
             <div class="subtitle">
                 Escolha a melhor dupla (ou casal rs) da Companhia dos Instrutores!
             </div>
-            <label for="dupla">Digite o nome da dupla:</label>
-            <input type="text" id="dupla" name="dupla" placeholder="Escolha sua dupla preferida!" required>
+            <input type="hidden" name="entry.827370412" value="Votação: Melhor Dupla">
+            <label for="dupla">Digite os nicknames da dupla:</label>
+            <input type="text" id="dupla" name="entry.1019419634" placeholder="Escolha sua dupla preferida!" required>
             <p class="example">Exemplo: joaobruxao e Joao:Roberto</p>
             <button type="submit">Enviar voto 💌</button>
             <button type="button" class="back-button" onclick="navigateTo('home')">Voltar para a página inicial</button>
@@ -393,8 +426,8 @@
                     Obrigado por votar na Melhor Dupla!<br>
                     Seu voto foi registrado com carinho!
                 </div>
-                <button onclick="restartDupla()">Votar novamente</button>
-                <button onclick="navigateTo('home')">Voltar para a página inicial</button>
+                <button type="button" onclick="restartDupla()">Votar novamente</button>
+                <button type="button" onclick="navigateTo('home')">Voltar para a página inicial</button>
             </div>
         </div>
     </div>
@@ -405,10 +438,12 @@
         function startConfetti() {
             if (confettiInterval) return;
             confettiInterval = setInterval(() => {
+                // Se saiu da tela de agradecimento, para o confete e remove os elementos
                 if (!document.getElementById('thank-you').style.display.includes('flex') &&
                     !document.getElementById('thank-you-dupla').style.display.includes('flex')) {
                     clearInterval(confettiInterval);
                     confettiInterval = null;
+                    document.querySelectorAll('.confetti').forEach(el => el.remove());
                     return;
                 }
                 const confetti = document.createElement('div');
@@ -434,47 +469,89 @@
                     document.getElementById('sending-loader').style.display = 'none';
                     document.getElementById('thank-you').style.display = 'none';
                     document.getElementById('form-correio').style.display = 'flex';
+                    // Limpa confete se ainda houver
+                    if (confettiInterval) {
+                        clearInterval(confettiInterval);
+                        confettiInterval = null;
+                    }
+                    document.querySelectorAll('.confetti').forEach(el => el.remove());
                 }
                 if(pageId === 'melhor-dupla') {
                     document.getElementById('sending-loader-dupla').style.display = 'none';
                     document.getElementById('thank-you-dupla').style.display = 'none';
                     document.getElementById('form-dupla').style.display = 'flex';
+                    // Limpa confete se ainda houver
+                    if (confettiInterval) {
+                        clearInterval(confettiInterval);
+                        confettiInterval = null;
+                    }
+                    document.querySelectorAll('.confetti').forEach(el => el.remove());
                 }
             }, 900); // tempo do loader (ajuste se quiser)
         }
 
-        // Correio Elegante - envio com loader e agradecimento
+        // Correio Elegante - envio real para Google Forms
         document.getElementById('form-correio').addEventListener('submit', function(e) {
             e.preventDefault();
             this.style.display = 'none';
             document.getElementById('sending-loader').style.display = 'flex';
-            setTimeout(() => {
-                document.getElementById('sending-loader').style.display = 'none';
-                document.getElementById('thank-you').style.display = 'flex';
-                startConfetti();
-            }, 2000);
+
+            const formData = new FormData(this);
+
+            fetch(this.action, {
+                method: 'POST',
+                mode: 'no-cors',
+                body: formData
+            }).then(() => {
+                setTimeout(() => {
+                    document.getElementById('sending-loader').style.display = 'none';
+                    document.getElementById('thank-you').style.display = 'flex';
+                    startConfetti();
+                }, 2000);
+            });
         });
         function restartCorreio() {
             document.getElementById('thank-you').style.display = 'none';
             document.getElementById('form-correio').reset();
             document.getElementById('form-correio').style.display = 'flex';
+            // Limpa confete se ainda houver
+            if (confettiInterval) {
+                clearInterval(confettiInterval);
+                confettiInterval = null;
+            }
+            document.querySelectorAll('.confetti').forEach(el => el.remove());
         }
 
-        // Melhor Dupla - envio com loader e agradecimento
+        // Melhor Dupla - envio real para Google Forms
         document.getElementById('form-dupla').addEventListener('submit', function(e) {
             e.preventDefault();
             this.style.display = 'none';
             document.getElementById('sending-loader-dupla').style.display = 'flex';
-            setTimeout(() => {
-                document.getElementById('sending-loader-dupla').style.display = 'none';
-                document.getElementById('thank-you-dupla').style.display = 'flex';
-                startConfetti();
-            }, 2000);
+
+            const formData = new FormData(this);
+
+            fetch(this.action, {
+                method: 'POST',
+                mode: 'no-cors',
+                body: formData
+            }).then(() => {
+                setTimeout(() => {
+                    document.getElementById('sending-loader-dupla').style.display = 'none';
+                    document.getElementById('thank-you-dupla').style.display = 'flex';
+                    startConfetti();
+                }, 2000);
+            });
         });
         function restartDupla() {
             document.getElementById('thank-you-dupla').style.display = 'none';
             document.getElementById('form-dupla').reset();
             document.getElementById('form-dupla').style.display = 'flex';
+            // Limpa confete se ainda houver
+            if (confettiInterval) {
+                clearInterval(confettiInterval);
+                confettiInterval = null;
+            }
+            document.querySelectorAll('.confetti').forEach(el => el.remove());
         }
 
         // Loader do lobo ao abrir a página inicial
