@@ -354,6 +354,51 @@
                 font-size: 0.95rem;
             }
         }
+        .btn-breve {
+            background: linear-gradient(90deg, #cccccc, #e0e0e0);
+            color: #888;
+            border: none;
+            border-radius: 8px;
+            padding: 12px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: not-allowed;
+            margin-top: 12px;
+            box-shadow: 0 2px 12px #8882;
+            display: block;
+            position: relative;
+            transition: background 0.2s;
+            width: 100%;
+        }
+        .btn-breve span {
+            margin-right: 8px;
+            font-size: 1.2em;
+        }
+        .btn-breve:hover {
+            background: linear-gradient(90deg, #bbbbbb, #dddddd);
+        }
+        .tooltip-contador {
+            position: absolute;
+            left: 50%;
+            top: -48px;
+            transform: translateX(-50%);
+            background: #3a8dde;
+            color: #fff;
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            white-space: nowrap;
+            box-shadow: 0 2px 12px #3a8dde44;
+            z-index: 10;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.2s;
+        }
+        .btn-breve.show-tooltip .tooltip-contador {
+            opacity: 1;
+            pointer-events: auto;
+        }
     </style>
 </head>
 <body>
@@ -380,7 +425,11 @@
             <div class="subtitle">Escolha uma das opções abaixo:</div>
             <div style="display:flex; flex-direction:column; gap:16px; width:100%; margin-top:16px;">
                 <button type="button" style="width:80%; align-self:center;" onclick="navigateTo('correio')">Correio Elegante 💌</button>
-                <button type="button" style="width:80%; align-self:center;" onclick="navigateTo('melhor-dupla')">Votação: Melhor Dupla 👫</button>
+                <button type="button" id="btn-melhor-dupla" style="width:80%; align-self:center; display:none;" onclick="navigateTo('melhor-dupla')">Votação: Melhor Dupla 👫</button>
+                <button type="button" id="btn-dupla-breve" class="btn-breve" style="width:80%; align-self:center; display:block; position:relative;">
+                    <span>🔒</span>Em breve
+                    <span class="tooltip-contador" id="contador-tooltip"></span>
+                </button>
             </div>
         </div>
     </div>
@@ -595,6 +644,53 @@
                 document.getElementById('page-loader').style.display = 'none';
                 document.getElementById('home').classList.add('active');
             }, 900); // mesmo tempo do loader das trocas de página
+
+            // Controle de exibição do botão Melhor Dupla
+            const btnDupla = document.getElementById('btn-melhor-dupla');
+            const btnBreve = document.getElementById('btn-dupla-breve');
+            const agora = new Date();
+            const liberar = new Date(agora.getFullYear(), 5, 10, 0, 0, 0); // 5 = junho (0-indexado)
+            if (agora >= liberar) {
+                btnDupla.style.display = '';
+                btnBreve.style.display = 'none';
+            } else {
+                btnDupla.style.display = 'none';
+                btnBreve.style.display = '';
+            }
+        });
+
+        // Contador regressivo para o botão "Em breve"
+        const btnBreve = document.getElementById('btn-dupla-breve');
+        const tooltip = document.getElementById('contador-tooltip');
+        const liberarDupla = new Date(new Date().getFullYear(), 5, 10, 0, 0, 0); // 10/06 00:00
+
+        function getTempoRestante() {
+            const agora = new Date();
+            let diff = liberarDupla - agora;
+            if (diff < 0) diff = 0;
+            const dias = Math.floor(diff / (1000 * 60 * 60 * 24));
+            const horas = Math.floor((diff / (1000 * 60 * 60)) % 24);
+            const minutos = Math.floor((diff / (1000 * 60)) % 60);
+            const segundos = Math.floor((diff / 1000) % 60);
+            return `${dias}d ${horas}h ${minutos}m ${segundos}s`;
+        }
+
+        let tooltipInterval = null;
+
+        btnBreve.addEventListener('click', function(e) {
+            e.preventDefault();
+            // Mostra o tooltip com o contador
+            btnBreve.classList.add('show-tooltip');
+            tooltip.textContent = "Disponível em: " + getTempoRestante();
+            clearInterval(tooltipInterval);
+            tooltipInterval = setInterval(() => {
+                tooltip.textContent = "Disponível em: " + getTempoRestante();
+            }, 1000);
+            // Esconde o tooltip após 4 segundos
+            setTimeout(() => {
+                btnBreve.classList.remove('show-tooltip');
+                clearInterval(tooltipInterval);
+            }, 4000);
         });
     </script>
 </body>
