@@ -30,16 +30,20 @@
             border-radius: 18px;
             box-shadow: 0 8px 32px rgba(58,141,222,0.18);
             width: 100%;
-            padding: 38px 28px 24px 28px;
+            padding: 38px 28px 32px 28px; /* aumentei o padding inferior */
             border: 2.5px solid #3a8dde;
             position: relative;
             display: flex;
             flex-direction: column;
             align-items: center;
+            margin-top: 56px; /* ou mais, se quiser mais espaço */
+            padding-top: 54px; /* diminua de 70px para 54px */
+            margin-bottom: 24px; /* espaço extra embaixo */
+            overflow: visible;
         }
         .envelope-seal {
             position: absolute;
-            top: -36px;
+            top: -28px; /* diminua de -36px para -28px */
             left: 50%;
             transform: translateX(-50%);
             background: #fff;
@@ -52,6 +56,7 @@
             justify-content: center;
             z-index: 2;
             box-shadow: 0 2px 8px #f7b6d288;
+            margin-bottom: 10px;
         }
         .envelope-seal span, .envelope-seal img {
             font-size: 2rem;
@@ -67,11 +72,15 @@
             letter-spacing: 1px;
             margin-top: 18px;
         }
+        h1 {
+            margin-top: 32px;
+            margin-bottom: 12px;
+        }
         .subtitle {
             text-align: center;
             color: #f7b6d2;
             font-weight: 600;
-            margin-bottom: 12px;
+            margin-bottom: 10px;
         }
         label {
             display: block;
@@ -322,6 +331,8 @@
             .envelope-card {
                 max-width: 320px; 
                 margin: 0 auto;
+                padding-top: 60px;
+                margin-top: 36px;
             }
             input, textarea {
                 width: 100%;
@@ -352,6 +363,11 @@
             }
             .example {
                 font-size: 0.95rem;
+            }
+        }
+        @media (min-width: 601px) {
+            .envelope-card {
+                margin-top: 56px;
             }
         }
         .btn-breve {
@@ -399,6 +415,104 @@
             opacity: 1;
             pointer-events: auto;
         }
+        @keyframes shake {
+            0% { transform: translateX(0);}
+            20% { transform: translateX(-6px);}
+            40% { transform: translateX(6px);}
+            60% { transform: translateX(-4px);}
+            80% { transform: translateX(4px);}
+            100% { transform: translateX(0);}
+        }
+        .btn-breve.shake {
+            animation: shake 0.5s;
+        }
+        .ranking-list {
+            list-style: none;
+            padding-left: 0;
+            margin: 0 0 18px 0;
+        }
+        .ranking-list li {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.1rem;
+            margin-bottom: 8px;
+            background: #f7faff;
+            border-radius: 8px;
+            padding: 8px 12px;
+            border: 1.5px solid #e0e7ef;
+        }
+        .ranking-list li.top1 {
+            background: linear-gradient(90deg, #ffe082 60%, #fffde7 100%);
+            font-weight: bold;
+            color: #bfa100;
+            border: 2px solid #ffe082;
+        }
+        .ranking-list li.top2 {
+            background: linear-gradient(90deg, #e0e0e0 60%, #fff 100%);
+            font-weight: bold;
+            color: #888;
+            border: 2px solid #e0e0e0;
+        }
+        .ranking-list li.top3 {
+            background: linear-gradient(90deg, #ffd180 60%, #fff3e0 100%);
+            font-weight: bold;
+            color: #b26a00;
+            border: 2px solid #ffd180;
+        }
+        .ranking-medal {
+            font-size: 1.4em;
+            margin-right: 6px;
+        }
+        .ranking-toggle-btn {
+            background: #fff !important;
+            color: #3a8dde !important;
+            border: 2px solid #3a8dde !important;
+            font-weight: 700;
+            box-shadow: 0 2px 8px #3a8dde22;
+            transition: background 0.3s, color 0.3s, border 0.2s, transform 0.2s;
+        }
+        .ranking-toggle-btn:not(.active):hover {
+            background: linear-gradient(90deg, #f7b6d2 60%, #3a8dde 100%) !important;
+            color: #fff !important;
+            border: 2px solid #3a8dde !important;
+            transform: scale(1.06) translateY(-2px);
+            box-shadow: 0 4px 18px #3a8dde44;
+        }
+        .ranking-toggle-btn.active {
+            background: linear-gradient(90deg, #3a8dde, #f7b6d2) !important;
+            color: #fff !important;
+            border: none !important;
+            cursor: default;
+            box-shadow: 0 2px 12px #3a8dde33;
+        }
+        #ranking-galanteador,
+        #ranking-popular {
+            opacity: 0;
+            pointer-events: none;
+            display: none;
+            transition: opacity 0.4s;
+        }
+        #ranking-galanteador.active,
+        #ranking-popular.active {
+            opacity: 1;
+            pointer-events: auto;
+            display: block;
+            transition: opacity 0.4s;
+        }
+        .envelope-card {
+            position: relative;
+            overflow: visible;
+            padding-top: 44px; 
+        }
+        @media (max-width: 600px) {
+            .envelope-card {
+                padding-top: 34px;
+            }
+            .envelope-seal {
+                top: -20px; 
+            }
+        }
     </style>
 </head>
 <body>
@@ -423,6 +537,9 @@
             </div>
             <h1>Semana Romântica dos Instrutores</h1>
             <div class="subtitle">Escolha uma das opções abaixo:</div>
+            <div id="contador-cartinhas" style="text-align:center; color:#3a8dde; font-weight:700; margin-bottom:10px;">
+                Enviando amor... 💌
+            </div>
             <div style="display:flex; flex-direction:column; gap:16px; width:100%; margin-top:16px;">
                 <button type="button" style="width:80%; align-self:center;" onclick="navigateTo('correio')">Correio Elegante 💌</button>
                 <button type="button" id="btn-melhor-dupla" style="width:80%; align-self:center; display:none;" onclick="navigateTo('melhor-dupla')">Votação: Melhor Dupla 👫</button>
@@ -430,6 +547,7 @@
                     <span>🔒</span>Em breve
                     <span class="tooltip-contador" id="contador-tooltip"></span>
                 </button>
+                <button type="button" id="btn-ranking" style="width:80%; align-self:center;" onclick="navigateTo('ranking')">Ranking 💎</button>
             </div>
         </div>
     </div>
@@ -514,6 +632,19 @@
         </div>
     </div>
 
+    <!-- Ranking -->
+    <div class="page" id="ranking">
+        <div class="envelope-card">
+            <div class="envelope-seal"><span>💎</span></div>
+            <div style="display:flex; gap:10px; margin-bottom:18px; width:100%;">
+                <button type="button" id="btn-galanteador" class="ranking-toggle-btn" style="flex:1; font-weight:700;">Mais Galanteadores!</button>
+                <button type="button" id="btn-popular" class="ranking-toggle-btn" style="flex:1; font-weight:700;">Mais Populares!</button>
+            </div>
+            <div id="ranking-galanteador"></div>
+            <div id="ranking-popular"></div>
+            <button type="button" class="back-button" onclick="navigateTo('home')">Voltar</button>
+        </div>
+    </div>
     <script>
         // Confete só nas telas de agradecimento
         let confettiInterval = null;
@@ -540,7 +671,6 @@
 
         // Navegação entre páginas
         function navigateTo(pageId) {
-            // Mostra o loader do lobo
             document.getElementById('page-loader').style.display = 'flex';
             setTimeout(() => {
                 document.getElementById('page-loader').style.display = 'none';
@@ -569,7 +699,10 @@
                     }
                     document.querySelectorAll('.confetti').forEach(el => el.remove());
                 }
-            }, 900); // tempo do loader (ajuste se quiser)
+                if(pageId === 'ranking') {
+                    carregarRanking();
+                }
+            }, 900);
         }
 
         // Correio Elegante - envio real para Google Forms
@@ -679,6 +812,10 @@
 
         btnBreve.addEventListener('click', function(e) {
             e.preventDefault();
+            // Efeito divertido: tremida
+            btnBreve.classList.add('shake');
+            setTimeout(() => btnBreve.classList.remove('shake'), 500);
+
             // Mostra o tooltip com o contador
             btnBreve.classList.add('show-tooltip');
             tooltip.textContent = "Disponível em: " + getTempoRestante();
@@ -692,6 +829,96 @@
                 clearInterval(tooltipInterval);
             }, 4000);
         });
+
+        function carregarRanking() {
+            // URLs dos CSVs publicados do Google Sheets
+            const urlGalanteador = 'https://corsproxy.io/?https://docs.google.com/spreadsheets/d/e/2PACX-1vSMaINI1nzdo1x0LUwZF-3q8RxzKAU6sl2-QsAnE3yJPmKbJIJPXb60HnBmp_j5Za5sNyh7vRD77aie/pub?gid=29067562&single=true&output=csv';
+            const urlPopular = 'https://corsproxy.io/?https://docs.google.com/spreadsheets/d/e/2PACX-1vSMaINI1nzdo1x0LUwZF-3q8RxzKAU6sl2-QsAnE3yJPmKbJIJPXb60HnBmp_j5Za5sNyh7vRD77aie/pub?gid=3938951&single=true&output=csv';
+
+            // Função para buscar e exibir
+            function fetchAndShow(url, containerId) {
+                fetch(url)
+                    .then(res => res.text())
+                    .then(text => {
+                        const linhas = text.trim().split('\n');
+                        console.log(linhas); // <-- Adicione esta linha para depuração
+                        let html = '<ol class="ranking-list">';
+                        for (let i = 1; i < linhas.length; i++) {
+                            if (!linhas[i].trim()) continue; // pula linhas vazias
+                            const partes = linhas[i].split(/[,;](?=(?:[^"]*"[^"]*")*[^"]*$)/);
+                            const nome = partes[0];
+                            const qtd = partes[1];
+                            let classe = '';
+                            let medalha = '';
+                            if (i === 1) { classe = 'top1'; medalha = '🥇'; }
+                            else if (i === 2) { classe = 'top2'; medalha = '🥈'; }
+                            else if (i === 3) { classe = 'top3'; medalha = '🥉'; }
+                            html += `<li class="${classe}">${medalha ? `<span class="ranking-medal">${medalha}</span>` : ''}<b>${nome || '(anônimo)'}</b> — ${qtd} cartinha(s)</li>`;
+                        }
+                        html += '</ol>';
+                        document.getElementById(containerId).innerHTML = html;
+                    });
+            }
+
+            fetchAndShow(urlGalanteador, 'ranking-galanteador');
+            fetchAndShow(urlPopular, 'ranking-popular');
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const btnGalanteador = document.getElementById('btn-galanteador');
+            const btnPopular = document.getElementById('btn-popular');
+            const divGalanteador = document.getElementById('ranking-galanteador');
+            const divPopular = document.getElementById('ranking-popular');
+
+            function showRanking(tipo) {
+                if (tipo === 'galanteador') {
+                    divGalanteador.classList.add('active');
+                    divPopular.classList.remove('active');
+                    btnGalanteador.classList.add('active');
+                    btnPopular.classList.remove('active');
+                } else {
+                    divGalanteador.classList.remove('active');
+                    divPopular.classList.add('active');
+                    btnGalanteador.classList.remove('active');
+                    btnPopular.classList.add('active');
+                }
+            }
+
+            btnGalanteador.addEventListener('click', function() {
+                showRanking('galanteador');
+            });
+            btnPopular.addEventListener('click', function() {
+                showRanking('popular');
+            });
+
+            // Mostra galanteador por padrão
+            showRanking('galanteador');
+        });
+
+        function atualizarContadorCartinhas() {
+            // CSV do ranking "Mais Populares" (quem recebeu)
+            const url = 'https://corsproxy.io/?https://docs.google.com/spreadsheets/d/e/2PACX-1vSMaINI1nzdo1x0LUwZF-3q8RxzKAU6sl2-QsAnE3yJPmKbJIJPXb60HnBmp_j5Za5sNyh7vRD77aie/pub?gid=3938951&single=true&output=csv';
+            fetch(url)
+                .then(res => res.text())
+                .then(text => {
+                    const linhas = text.trim().split('\n');
+                    let total = 0;
+                    for (let i = 1; i < linhas.length; i++) {
+                        const partes = linhas[i].split(/[,;](?=(?:[^"]*"[^"]*")*[^"]*$)/);
+                        const qtd = parseInt(partes[1]);
+                        if (!isNaN(qtd)) total += qtd;
+                    }
+                    document.getElementById('contador-cartinhas').textContent =
+                        `Cartinhas já enviadas: ${total} 💌`;
+                })
+                .catch(() => {
+                    document.getElementById('contador-cartinhas').textContent =
+                        'Não foi possível carregar o total de cartinhas.';
+                });
+        }
+
+        // Atualiza ao carregar a página inicial
+        document.addEventListener('DOMContentLoaded', atualizarContadorCartinhas);
     </script>
 </body>
 </html>
